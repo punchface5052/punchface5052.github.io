@@ -2,6 +2,7 @@
 
 ## Demos
 - [Schmoving Square](schmoving-square)
+- [Image Demo](image-demo)
 
 ## Projects
 - [Interactive Scene](interactive-scene)
