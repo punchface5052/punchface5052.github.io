@@ -13,8 +13,9 @@ function setup() {
 let mouseD = 50;
 let charX = 50;
 let charY = 50;
-let speed = 5;
 let charD = 100;
+let speed = 5;
+let time = 0;
 
 function moveChar() {
   if (keyIsDown(87)) { //w
@@ -34,6 +35,14 @@ function moveChar() {
 
 function mouseDisp(){
   circle(mouseX,mouseY,mouseD)
+}
+
+// function attack(){
+//   stroke(0)
+//   if (mousePressed&&time===0){
+//     line(charX,charY,mouseX,mouseY)
+    
+  }
 }
 
 function setup() {
