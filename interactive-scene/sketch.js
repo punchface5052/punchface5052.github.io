@@ -8,8 +8,11 @@
 
 function setup() {
   createCanvas(400, 400);
+  angleMode(DEGREES);
 }
-
+let arrowX;
+let arrowY;
+let 
 let mouseD = 50;
 let charX = 50;
 let charY = 50;
@@ -30,7 +33,19 @@ function moveChar() {
   if (keyIsDown(68)) { //d
     charX += speed;   
   }
+}
+
+function charDisp(){
   circle(charX, charY, charD);
+  arrowX = charX+1/2*d;
+  arrowY = charY;
+  leftAngle = atan2(mouseY - arrowY, mouseX - arrowX);
+  translate(arrowX, arrowY);
+  fill(255);
+  ellipse(0, 0, 50, 50);
+  rotate(leftAngle);
+  fill(0);
+  ellipse(d*1.25, 0, 25, 25);
 }
 
 function mouseDisp(){
@@ -41,9 +56,7 @@ function mouseDisp(){
 //   stroke(0)
 //   if (mousePressed&&time===0){
 //     line(charX,charY,mouseX,mouseY)
-    
-  }
-}
+
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -51,7 +64,8 @@ function setup() {
 
 function draw() {
   background(255);
-  moveChar()
-  mouseDisp()
-  text("Cheese",windowWidth/2,windowHeight/2)
+  moveChar();
+  charDisp();
+  mouseDisp();
+  text("Cheese",windowWidth/2,windowHeight/2);
 }
