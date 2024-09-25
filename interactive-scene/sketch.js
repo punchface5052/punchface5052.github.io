@@ -36,13 +36,12 @@ function moveChar() {
 }
 
 function charDisp(){
-  circle(charX, charY, charD);
   arrowX = charX+1/2*d;
   arrowY = charY;
   leftAngle = atan2(mouseY - arrowY, mouseX - arrowX);
   translate(arrowX, arrowY);
   fill(255);
-  ellipse(0, 0, 50, 50);
+  circle(0, 0, charD);
   rotate(leftAngle);
   fill(0);
   ellipse(d*1.25, 0, 25, 25);
