@@ -17,15 +17,18 @@ let mouseD = 10;
 let charX = 50;
 let charY = 50;
 let charD = 100;
+let enemyState = "dead";
 let enemyX;
 let enemyY;
-let enemyD;
+let enemyS = 50;
 let enemyLR;
 let enemyUD;
+let killCount = -1;
 let attackWidth = 50;
 let attackHeight = 25;
 let attackDistance = 1.25;
 let speed = 5;
+let enemySpeed = 0;
 let weaponState = 0;
 let direction = "";
 let attacking = false;
@@ -55,32 +58,48 @@ function moveChar() {
 }
 
 function spawnEnemy(){
-  enemyLR = random(1,2);
-  if (enemyLR === 1){
-    enemyX = random(0,10);
-  }
-  else {
-    enemyX = random(width-10,width);
-  }
+  enemyState = "alive";
+  // enemyLR = random(1,2);
+  // if (enemyLR === 1){
+  //   enemyX = random(0,10);
+  // }
+  // else {
+  //   enemyX = random(width-10,width);
+  // }
+  // enemyUD = random(1,2);
+  // if (enemyUD === 1){
+  //   enemyY = random(0,10);
+  // } 
+  // else{
+  //   enemyY = random(height-10,height);
+  // }
+  enemyX = width/2;
+  enemyY = height/2;
+  killCount++;
 }
 
 function enemyMovement(){
-  square(enemyX,enemyY,enemyD);
+  if (enemyX > charX){
+    enemyX-=enemySpeed;
+  }
+  else if (enemyX<charX){
+    enemyX +=enemySpeed;
+  }
+  if (enemyY > charY){
+    enemyY+=enemySpeed;
+  }
+  else if (enemyY < charY){
+    enemyY-=enemySpeed;
+  }
 
 }
 
-function hitDetec() {
-  if (weaponState === 0){
-    
-  }
-  else if (weaponState === 1){
 
-  }
-  else if (weaponState === 2){
-
-  }
-}
-
+// function hitDetec() {
+//   if (dist(charD*attackDistance,charD*attackDistance,enemyX,enemyY)>charD*attackDistance+20){
+//     enemyState = "dead";
+//   }
+// }
 
 function changeWeapon(){
   if (weaponState !== 2 && direction === "up"){
@@ -156,6 +175,11 @@ function mouseWheel(event){
 
 }
 
+function enemyDisp(){
+  square(enemyX,enemyY,enemyS);
+  enemyMovement();
+}
+
 function charDisp(){
   arrowX = charX+1/2*charD;
   arrowY = charY;
@@ -179,8 +203,16 @@ function draw() {
   background(255);
   moveChar();
   attack();
-  changeWeapon();
+  if (enemyState === "dead"){
+    spawnEnemy();
+  }
+  else{
+    enemyDisp();
+    console.log(enemyX);
+    enemyX++
+  }
   fill(0);
+  changeWeapon();
   text("Cheese",windowWidth/2,windowHeight/2);
   charDisp();
 }
