@@ -1,4 +1,4 @@
-// Interactive Scene
+// Project Title
 // Your Name
 // Date
 //
@@ -8,27 +8,21 @@
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  angleMode(DEGREES);
 }
-let arrowX;
-let arrowY;
-let leftAngle;
-let mouseD = 10;
+let state = "title"
 let charX = 50;
 let charY = 50;
 let charD = 100;
-let enemyState = "dead";
+let enemyState = "";
 let enemyX;
 let enemyY;
 let enemyS = 50;
 let enemyLR;
 let enemyUD;
 let killCount = -1;
-let attackWidth = 50;
-let attackHeight = 25;
-let attackDistance = 1.25;
+let attackSize = 50;
 let speed = 5;
-let enemySpeed = 0;
+let enemySpeed = 0.5;
 let weaponState = 0;
 let direction = "";
 let attacking = false;
@@ -43,63 +37,60 @@ const WEAPON_3_WAIT = 3000;
 
 
 function moveChar() {
-  if (keyIsDown(87)) { //w
+  if (keyIsDown(87)&&charY-charD/2>0) { //w
     charY -= speed;   
   }
-  if (keyIsDown(83)) { //s
+  if (keyIsDown(83)&&charY+charD/2<height) { //s
     charY += speed;   
   }
-  if (keyIsDown(65)) { //a
+  if (keyIsDown(65)&&charX>0) { //a
     charX -= speed;   
   }
-  if (keyIsDown(68)) { //d
+  if (keyIsDown(68)&&charX+charD<width) { //d
     charX += speed;   
   }
 }
 
 function spawnEnemy(){
   enemyState = "alive";
-  // enemyLR = random(1,2);
-  // if (enemyLR === 1){
-  //   enemyX = random(0,10);
-  // }
-  // else {
-  //   enemyX = random(width-10,width);
-  // }
-  // enemyUD = random(1,2);
-  // if (enemyUD === 1){
-  //   enemyY = random(0,10);
-  // } 
-  // else{
-  //   enemyY = random(height-10,height);
-  // }
-  enemyX = width/2;
-  enemyY = height/2;
+  enemyLR = round(random(1,2));
+  if (enemyLR === 1){
+    enemyX = 0;
+  }
+  else {
+    enemyX = width-enemyS;
+  }
+  enemyUD = round(random(1,2));
+  if (enemyUD === 1){
+    enemyY = 0;
+  } 
+  else{
+    enemyY = height-enemyS;
+  }
   killCount++;
+  enemySpeed += 0.5;
 }
 
 function enemyMovement(){
-  if (enemyX > charX){
+  if ((enemyX+enemyS/2)-(charX) > 0){
     enemyX-=enemySpeed;
   }
-  else if (enemyX<charX){
+  else if ((enemyX+enemyS/2)-(charX)<0){
     enemyX +=enemySpeed;
   }
-  if (enemyY > charY){
-    enemyY+=enemySpeed;
-  }
-  else if (enemyY < charY){
+  if ((enemyY+enemyS/2)-charY > 0){
     enemyY-=enemySpeed;
   }
-
+  else if ((enemyY+enemyS/2)-charY < 0){
+    enemyY+=enemySpeed;
+  }
 }
 
-
-// function hitDetec() {
-//   if (dist(charD*attackDistance,charD*attackDistance,enemyX,enemyY)>charD*attackDistance+20){
-//     enemyState = "dead";
-//   }
-// }
+function hitDetec() {
+  if (dist(charX,charY,enemyX+enemyS/2,enemyY+enemyS/2)<charD/2+enemyS/2){
+    state = "title";
+  }
+}
 
 function changeWeapon(){
   if (weaponState !== 2 && direction === "up"){
@@ -128,19 +119,13 @@ function changeWeapon(){
     weaponState = 2;
   }
   if (weaponState === 0){
-    attackWidth = 100;
-    attackHeight = 10;
-    attackDistance = 1.05;
+    attackSize = 50;
   }
   else if (weaponState === 1){
-    attackWidth = 75;
-    attackHeight = 75;
-    attackDistance = 1.5;
+    attackSize = 100;
   }
   else if (weaponState === 2){
-    attackWidth = 50;
-    attackHeight = 200;
-    attackDistance = 2;
+    attackSize = 150;
   }
 }
 
@@ -151,17 +136,32 @@ function attack(){
     lastAttack = millis();
   }
   else if (weaponState === 1 &&mouseIsPressed && millis() > lastAttack + WEAPON_2_WAIT){
-    attackSpeed = 5;
+    attackSpeed = 8;
     attacking = true;
     lastAttack = millis();
   }
   else if (weaponState === 2 && mouseIsPressed && millis() > lastAttack + WEAPON_3_WAIT){
-    attackSpeed = 3;
+    attackSpeed = 5;
     attacking = true;
     lastAttack = millis();
   }
   else if (millis() > lastAttack + ATTACK_DUR/attackSpeed){
     attacking = false;
+  }
+  mouseAttack();
+}
+
+function mouseAttack(){
+  if (attacking){
+    fill(0);
+    circle(mouseX,mouseY,attackSize)
+    if ((enemyX+enemyS/2<mouseX+attackSize/2&&enemyX+enemyS/2>mouseX-attackSize/2)&&(enemyY+enemyS/2<mouseY+attackSize/2&&enemyY+enemyS/2>mouseY-attackSize/2)){
+      enemyState = "dead"
+    }
+  }
+  else{
+    fill(255)
+    circle(mouseX,mouseY,attackSize)
   }
 }
 
@@ -176,43 +176,62 @@ function mouseWheel(event){
 }
 
 function enemyDisp(){
-  square(enemyX,enemyY,enemyS);
-  enemyMovement();
-}
-
-function charDisp(){
-  arrowX = charX+1/2*charD;
-  arrowY = charY;
-  leftAngle = atan2(mouseY - arrowY, mouseX - arrowX);
-  translate(arrowX, arrowY);
   fill(255);
-  circle(0, 0, charD);
-  rotate(leftAngle);
-  if (attacking){
-    fill(0);
-    ellipse(charD*attackDistance, 0, attackWidth, attackHeight);
-    fill(255);
+  if (state === "game"&&enemyState!="dead"&&enemyState!="alive"){
+    enemyState = "dead";
   }
-  else{
-    fill(255);
-    ellipse(charD*attackDistance, 0, attackWidth, attackHeight);
-  }
-}
-
-function draw() {
-  background(255);
-  moveChar();
-  attack();
   if (enemyState === "dead"){
     spawnEnemy();
   }
   else{
-    enemyDisp();
-    console.log(enemyX);
-    enemyX++
+    enemyMovement();
+    square(enemyX,enemyY,enemyS); 
   }
+}
+
+function charDisp(){
+  moveChar();
+  circle(charX,charY,charD);
+}
+
+function titleState(){
   fill(0);
+  textAlign(CENTER,CENTER)
+  textSize(50);
+  text("Click to begin",width/2,height/2);
+  textSize(25);
+  text("WASD to move",width/2,height/2+50)
+  text("Click to attack",width/2,height/2+80)
+  text("Scroll wheel to change weapon",width/2,height/2+110);
+}
+function reset(){
+  charX = width/2
+  charY = height/2
+  enemyState = "dead";
+  killCount = -1;
+}
+
+function gameState(){
+  state = "game";
+  strokeWeight(1)
+  background(255);
+  attack();
   changeWeapon();
-  text("Cheese",windowWidth/2,windowHeight/2);
+  textSize(25);
+  fill(0);
+  text("Kill Count = ",100,100)
+  text(killCount,200,100)
+  enemyDisp();
   charDisp();
+  hitDetec();
+}
+
+function draw() {
+  if (state === "title"&& !mouseIsPressed){
+    titleState();
+    reset();
+  }
+  else{
+    gameState();
+  }
 }

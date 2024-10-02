@@ -7,3 +7,4 @@
 
 ## Projects
 - [Interactive Scene](interactive-scene)
+- [Failed Attempt at the Interactive Scene](failed-interactive-scene)
