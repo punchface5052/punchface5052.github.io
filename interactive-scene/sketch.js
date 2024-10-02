@@ -1,15 +1,16 @@
-// Project Title
-// Your Name
-// Date
+// Dodge shooter game thingy
+// Liam Thorpe
+// Oct. 1, 2024
 //
 // Extra for Experts:
-// - describe what you did to take this project "above and beyond"
+// - As much as I want to say I went above and beyond, I was so stuck on the hit detection of the previous attempt at the interactive scene, so instead I opted to create another folder with my failed scene so you can see it. This version is essentially the easier version without all the confusing translations and rotations that made my brain hurt. I added the mouse wheel function as an additional part of the assignment. 
 
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 }
-let state = "title"
+let state = "title";
+let highscore = 0;
 let charX = 50;
 let charY = 50;
 let charD = 100;
@@ -208,7 +209,17 @@ function reset(){
   charX = width/2
   charY = height/2
   enemyState = "dead";
+  if ((killCount != -1)&&(killCount>highscore)){
+    highscore = killCount;
+    text("Highscore = ",100,150)
+    text(highscore,200,150)
+  }
+  else if (killCount!=-1){
+    text("Highscore = ",100,150)
+    text(highscore,200,150)
+  }
   killCount = -1;
+  enemySpeed = 0.5;
 }
 
 function gameState(){
