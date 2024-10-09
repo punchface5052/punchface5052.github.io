@@ -156,7 +156,7 @@ function mouseAttack(){
   if (attacking){
     fill(0);
     circle(mouseX,mouseY,attackSize)
-    if ((enemyX+enemyS/2<mouseX+attackSize/2&&enemyX+enemyS/2>mouseX-attackSize/2)&&(enemyY+enemyS/2<mouseY+attackSize/2&&enemyY+enemyS/2>mouseY-attackSize/2)){
+    if ((enemyX+enemyS<mouseX+attackSize/2&&enemyX>mouseX+attackSize/2)&&(enemyY+enemyS/2<mouseY+attackSize/2&&enemyY+enemyS/2>mouseY-attackSize/2)){
       enemyState = "dead"
     }
   }
@@ -178,7 +178,7 @@ function mouseWheel(event){
 
 function enemyDisp(){
   fill(255);
-  if (state === "game"&&enemyState!="dead"&&enemyState!="alive"){
+  if (state === "game"&&enemyState!=="dead"&&enemyState!=="alive"){
     enemyState = "dead";
   }
   if (enemyState === "dead"){
@@ -209,12 +209,12 @@ function reset(){
   charX = width/2
   charY = height/2
   enemyState = "dead";
-  if ((killCount != -1)&&(killCount>highscore)){
+  if ((killCount !== -1)&&(killCount>highscore)){
     highscore = killCount;
     text("Highscore = ",100,150)
     text(highscore,200,150)
   }
-  else if (killCount!=-1){
+  else if (killCount!==-1){
     text("Highscore = ",100,150)
     text(highscore,200,150)
   }

@@ -14,7 +14,9 @@ let highscore = 0;
 let charX = 50;
 let charY = 50;
 let charD = 50;
+let enemyArray = [];
 let enemyState = "";
+let roundKillCount = 0;
 let enemyX;
 let enemyY;
 let enemyS = 50;
@@ -59,7 +61,7 @@ function moveChar() {
   }
 }
 
-function spawnEnemy(){
+function spawnEnemies(){
   enemyState = "alive";
   enemyLR = round(random(1,2));
   if (enemyLR === 1){
@@ -75,7 +77,6 @@ function spawnEnemy(){
   else{
     enemyY = height-enemyS;
   }
-  killCount++;
   enemySpeed += 0.5;
 }
 
@@ -188,11 +189,8 @@ function enemyDisp(){
   if (state === "game"&&enemyState===""){
     enemyState = "dead";
   }
- 
-  
-  //enemy dead count === array.length  
   if (enemyState === "dead"){
-    enemyDeathCount++;
+    spawnEnemy();
   }
   else{
     enemyMovement();
@@ -219,15 +217,6 @@ function reset(){
   charX = width/2;
   charY = height/2;
   enemyState = "dead";
-  if (killCount !== -1&&killCount>highscore){
-    highscore = killCount;
-    text("Highscore = ",100,150);
-    text(highscore,200,150);
-  }
-  else if (killCount!==-1){
-    text("Highscore = ",100,150);
-    text(highscore,200,150);
-  }
   killCount = -1;
   enemySpeed = 0.5;
 }
@@ -240,11 +229,23 @@ function gameState(){
   changeWeapon();
   textSize(25);
   fill(0);
-  text("Kill Count = ",100,100);
-  text(killCount,200,100);
   enemyDisp();
   charDisp();
   hitDetec();
+}
+
+function alwaysRunning(){
+  if (killCount !== -1&&killCount>highscore){
+    highscore = killCount;
+    text("Highscore = ",100,150);
+    text(highscore,200,150);
+  }
+  else if (killCount!==-1){
+    text("Highscore = ",100,150);
+    text(highscore,200,150);
+  }
+  text("Kill Count = ",100,100);
+  text(killCount,200,100);
 }
 
 function draw() {
@@ -255,4 +256,5 @@ function draw() {
   else{
     gameState();
   }
+  alwaysRunning();
 }
