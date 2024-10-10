@@ -155,14 +155,14 @@ function attack(){
 function mouseAttack(){
   if (attacking){
     fill(0);
-    circle(mouseX,mouseY,attackSize)
-    if ((enemyX+enemyS<mouseX+attackSize/2&&enemyX>mouseX+attackSize/2)&&(enemyY+enemyS/2<mouseY+attackSize/2&&enemyY+enemyS/2>mouseY-attackSize/2)){
-      enemyState = "dead"
+    circle(mouseX,mouseY,attackSize);
+    if (dist(enemyX+enemyS/2,enemyY+enemyS/2,mouseX,mouseY)<enemyS/2+attackSize/2){
+      enemyState = "dead";
     }
   }
   else{
-    fill(255)
-    circle(mouseX,mouseY,attackSize)
+    fill(255);
+    circle(mouseX,mouseY,attackSize);
   }
 }
 

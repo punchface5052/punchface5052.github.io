@@ -17,8 +17,6 @@ let charD = 50;
 let enemyArray = [];
 let enemyState = "";
 let roundKillCount = 0;
-let enemyX;
-let enemyY;
 let enemyS = 50;
 let enemyLR;
 let enemyUD;
@@ -62,23 +60,33 @@ function moveChar() {
 }
 
 function spawnEnemies(){
-  enemyState = "alive";
   enemyLR = round(random(1,2));
-  if (enemyLR === 1){
-    enemyX = 0;
-  }
-  else {
-    enemyX = width-enemyS;
-  }
   enemyUD = round(random(1,2));
-  if (enemyUD === 1){
-    enemyY = 0;
-  } 
-  else{
-    enemyY = height-enemyS;
+  let enemy = {
+    x: 
+    y:
+
   }
-  enemySpeed += 0.5;
 }
+
+// function spawnEnemies(){
+//   enemyState = "alive";
+//   enemyLR = round(random(1,2));
+//   if (enemyLR === 1){
+//     enemyX = 0;
+//   }
+//   else {
+//     enemyX = width-enemyS;
+//   }
+//   enemyUD = round(random(1,2));
+//   if (enemyUD === 1){
+//     enemyY = 0;
+//   } 
+//   else{
+//     enemyY = height-enemyS;
+//   }
+//   enemySpeed += 0.5;
+// }
 
 function enemyMovement(){
   if (enemyX+enemyS/2-charX > 0){
@@ -164,8 +172,10 @@ function mouseAttack(){
   if (attacking){
     fill(0);
     circle(mouseX,mouseY,attackSize);
-    if (enemyX+enemyS/2<mouseX+attackSize/2&&enemyX+enemyS/2>mouseX-attackSize/2&&(enemyY+enemyS/2<mouseY+attackSize/2&&enemyY+enemyS/2>mouseY-attackSize/2)){
-      enemyState = "dead";
+    for (let enemy of enemyArray){
+      if (dist(enemy.x+enemyS/2,enemy.y+enemyS/2,mouseX,mouseY<enemyS/2-attackSize/2)){
+        enemyState = "dead";
+      }
     }
   }
   else{
