@@ -206,32 +206,32 @@ function titleState(){
   text("Scroll wheel to change weapon",width/2,height/2+110);
 }
 function reset(){
-  charX = width/2
-  charY = height/2
+  charX = width/2;
+  charY = height/2;
   enemyState = "dead";
-  if ((killCount !== -1)&&(killCount>highscore)){
-    highscore = killCount;
-    text("Highscore = ",100,150)
-    text(highscore,200,150)
-  }
-  else if (killCount!==-1){
-    text("Highscore = ",100,150)
-    text(highscore,200,150)
-  }
   killCount = -1;
   enemySpeed = 0.5;
 }
 
 function gameState(){
   state = "game";
-  strokeWeight(1)
+  strokeWeight(1);
   background(255);
   attack();
   changeWeapon();
   textSize(25);
   fill(0);
-  text("Kill Count = ",100,100)
-  text(killCount,200,100)
+  text("Kill Count = ",100,100);
+  text(killCount,200,100);
+  if (killCount !== -1&&killCount>highscore){
+    highscore = killCount;
+    text("Highscore = ",100,150);
+    text(highscore,200,150);
+  }
+  else if (killCount!==-1){
+    text("Highscore = ",100,150);
+    text(highscore,200,150);
+  }
   enemyDisp();
   charDisp();
   hitDetec();

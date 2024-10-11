@@ -60,12 +60,23 @@ function moveChar() {
 }
 
 function spawnEnemies(){
-  enemyLR = round(random(1,2));
-  enemyUD = round(random(1,2));
+  enemyLR = random();
+  enemyUD = random();
   let enemy = {
-    x: 
-    y:
-
+    x: 0,
+    y: 0,
+  };
+  if (enemyLR < 0.5){
+    enemy.x = 0;
+  }
+  else{
+    enemy.x = width - enemyS; 
+  }
+  if (enemyUD < 0.5){
+    enemy.y = 0;
+  }
+  else{
+    enemy.y = height - enemyS; 
   }
 }
 
