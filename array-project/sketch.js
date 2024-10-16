@@ -8,6 +8,9 @@
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  for (let i=0;i<2;i++){
+    spawnEnemies();
+  }
 }
 let state = "title";
 let highscore = 0;
@@ -24,7 +27,7 @@ let enemyUD;
 let killCount = -1;
 let attackSize = 50;
 let speed = 5;
-let enemySpeed = 0.5;
+const enemySpeed = 0.1;
 let weaponState = 0;
 let direction = "";
 let attacking = false;
@@ -183,6 +186,8 @@ function mouseAttack(){
     for (let enemy of enemyArray){
       if (dist(enemy.x+enemyS/2,enemy.y+enemyS/2,mouseX,mouseY)<enemyS/2-attackSize/2){
         enemy.isLiving = false;
+        let enemyNumb = enemyArray.indexOf(enemy);
+        enemyArray.splice(enemyNumb);
       }
     }
   }
@@ -242,7 +247,6 @@ function reset(){
     enemy.isLiving = false;
   }
   killCount = -1;
-  enemySpeed = 0.5;
 }
 
 function gameState(){
