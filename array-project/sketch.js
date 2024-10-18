@@ -8,9 +8,6 @@
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  for (let i=0;i<2;i++){
-    spawnEnemies();
-  }
 }
 let state = "title";
 let highscore = 0;
@@ -27,10 +24,11 @@ let enemyUD;
 let killCount = -1;
 let attackSize = 50;
 let speed = 5;
-const enemySpeed = 0.1;
+const enemySpeed = 2;
 let weaponState = 0;
 let direction = "";
 let attacking = false;
+let lastEnemySpawn = 0;
 let lastAttack = 0;
 let attackSpeed = 1;
 const ATTACK_DUR = 1000;
@@ -73,27 +71,11 @@ function spawnEnemies(){
   else{
     enemy.y = height + enemyS; 
   }
-  enemyArray.push(enemy);
+  if (millis()>lastEnemySpawn+5000){
+    enemyArray.push(enemy);
+    lastEnemySpawn = millis();
+  }
 }
-
-// function spawnEnemies(){
-//   enemyState = "alive";
-//   enemyLR = round(random(1,2));
-//   if (enemyLR === 1){
-//     enemyX = 0;
-//   }
-//   else {
-//     enemyX = width-enemyS;
-//   }
-//   enemyUD = round(random(1,2));
-//   if (enemyUD === 1){
-//     enemyY = 0;
-//   } 
-//   else{
-//     enemyY = height-enemyS;
-//   }
-//   enemySpeed += 0.5;
-// }
 
 function enemyMovement(){
   for (let enemy of enemyArray){
@@ -184,10 +166,9 @@ function mouseAttack(){
     fill(0);
     circle(mouseX,mouseY,attackSize);
     for (let enemy of enemyArray){
-      if (dist(enemy.x+enemyS/2,enemy.y+enemyS/2,mouseX,mouseY)<enemyS/2-attackSize/2){
+      if (dist(enemy.x+enemyS/2,enemy.y+enemyS/2,mouseX,mouseY)<enemyS/2+attackSize/2){
         enemy.isLiving = false;
-        let enemyNumb = enemyArray.indexOf(enemy);
-        enemyArray.splice(enemyNumb);
+        enemyArray.pop();
       }
     }
   }
@@ -210,17 +191,11 @@ function mouseWheel(event){
 function enemyDisp(){
   for (let enemy of enemyArray){
     fill(255);
-    if (state === "game"&&enemyState===""){
-      enemy.isLiving = false;
-      enemyState = "start";
-    }
-    if (enemy.isLiving === false){
-      spawnEnemies();
-    }
-    else{
-      enemyMovement();
-      square(enemy.x,enemy.y,enemyS); 
-    }
+    enemyMovement();
+    square(enemy.x,enemy.y,enemyS); 
+  }
+  if (enemyArray.length === 1){
+    spawnEnemies();
   }
 }
 
@@ -243,9 +218,9 @@ function titleState(){
 function reset(){
   charX = width/2;
   charY = height/2;
-  for (let enemy of enemyArray){
-    enemy.isLiving = false;
-  }
+  // for (let enemy of enemyArray){
+  //   enemy.isLiving = false;
+  // }
   killCount = -1;
 }
 
@@ -260,6 +235,7 @@ function gameState(){
   enemyDisp();
   charDisp();
   hitDetec();
+
 }
 
 function alwaysRunning(){
