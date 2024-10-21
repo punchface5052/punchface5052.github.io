@@ -9,7 +9,8 @@
 function setup() {
   createCanvas(windowWidth, windowHeight);
 }
-let state = "title";
+
+let state = "title"; 
 let highscore = 0;
 let charX = 50;
 let charY = 50;
@@ -24,7 +25,7 @@ let enemyUD;
 let killCount = -1;
 let attackSize = 50;
 let speed = 5;
-const enemySpeed = 2;
+let enemySpeed = 2;
 let weaponState = 0;
 let direction = "";
 let attacking = false;
@@ -36,20 +37,24 @@ const WEAPON_1_WAIT = 1000;
 const WEAPON_2_WAIT = 2000;
 const WEAPON_3_WAIT = 3000;
 
+// Character Movement
+
 function moveChar() {
-  if (keyIsDown(87)&&charY-charD/2>0) { //w
+  if ((keyIsDown(87) || keyIsDown(38))&&charY-charD/2>0) { //w / up arrow
     charY -= speed;   
   }
-  if (keyIsDown(83)&&charY+charD/2<height) { //s
+  if ((keyIsDown(83)||keyIsDown(40))&&charY+charD/2<height) { //s / down arrow
     charY += speed;   
   }
-  if (keyIsDown(65)&&charX>0) { //a
+  if ((keyIsDown(65)||keyIsDown(37))&&charX>0) { //a / left arrow
     charX -= speed;   
   }
-  if (keyIsDown(68)&&charX+charD<width) { //d
+  if ((keyIsDown(68)||keyIsDown(39))&&charX+charD<width) { //d / right arrow
     charX += speed;   
   }
 }
+
+// Spawn enemies in a random corner
 
 function spawnEnemies(){
   enemyLR = random();
@@ -69,13 +74,12 @@ function spawnEnemies(){
     enemy.y = 0;
   }
   else{
-    enemy.y = height + enemyS; 
+    enemy.y = height - enemyS; 
   }
-  if (millis()>lastEnemySpawn+5000){
-    enemyArray.push(enemy);
-    lastEnemySpawn = millis();
-  }
+  enemyArray.push(enemy);
 }
+
+// Enemy movement
 
 function enemyMovement(){
   for (let enemy of enemyArray){
@@ -94,6 +98,8 @@ function enemyMovement(){
   }
 }
 
+// Character death detection 
+
 function hitDetec() {
   for (let enemy of enemyArray){
     if (dist(charX,charY,enemy.x+enemyS/2,enemy.y+enemyS/2)<charD/2+enemyS/2){
@@ -101,6 +107,8 @@ function hitDetec() {
     }
   }
 }
+
+// change between 3 weapons, the larger, the slower
 
 function changeWeapon(){
   if (weaponState !== 2 && direction === "up"){
@@ -139,6 +147,8 @@ function changeWeapon(){
   }
 }
 
+// Set attack display and calculate last attack
+
 function attack(){
   if (weaponState === 0 && mouseIsPressed && millis() > lastAttack + WEAPON_1_WAIT){
     attackSpeed = 10;
@@ -158,17 +168,20 @@ function attack(){
   else if (millis() > lastAttack + ATTACK_DUR/attackSpeed){
     attacking = false;
   }
-  mouseAttack();
+  enemyHitDetec();
 }
 
-function mouseAttack(){
+// check enemy hit detec with attack hit detec
+
+function enemyHitDetec(){
   if (attacking){
     fill(0);
     circle(mouseX,mouseY,attackSize);
     for (let enemy of enemyArray){
       if (dist(enemy.x+enemyS/2,enemy.y+enemyS/2,mouseX,mouseY)<enemyS/2+attackSize/2){
         enemy.isLiving = false;
-        enemyArray.pop();
+        enemyArray.splice(enemyArray.indexOf(enemy),1);
+        roundKillCount += 1;
       }
     }
   }
@@ -177,6 +190,8 @@ function mouseAttack(){
     circle(mouseX,mouseY,attackSize);
   }
 }
+
+// change weapon depending on mouse up or down
 
 function mouseWheel(event){
   if (event.delta<0){
@@ -188,16 +203,23 @@ function mouseWheel(event){
 
 }
 
+// enemy display with incorperated round based enemy spawning
+
 function enemyDisp(){
   for (let enemy of enemyArray){
     fill(255);
     enemyMovement();
     square(enemy.x,enemy.y,enemyS); 
   }
-  if (enemyArray.length === 1){
-    spawnEnemies();
+  if (enemyArray.length <= roundKillCount+1 && lastEnemySpawn + 2000 < millis()){
+    for (let i = roundKillCount; i<roundKillCount+1; i++){
+      spawnEnemies();
+    }
+    lastEnemySpawn = millis();
   }
 }
+
+// character display
 
 function charDisp(){
   moveChar();
@@ -205,24 +227,31 @@ function charDisp(){
   circle(charX,charY,charD);
 }
 
+// Title state with main text
+
 function titleState(){
   fill(0);
   textAlign(CENTER,CENTER);
   textSize(50);
-  text("Click to begin",width/2,height/2);
+  text("Press enter to begin",width/2,height/2);
   textSize(25);
   text("WASD to move",width/2,height/2+50);
   text("Click to attack",width/2,height/2+80);
   text("Scroll wheel to change weapon",width/2,height/2+110);
 }
+
+// resets the game state
+
 function reset(){
   charX = width/2;
   charY = height/2;
-  // for (let enemy of enemyArray){
-  //   enemy.isLiving = false;
-  // }
+  enemyArray = [];
   killCount = -1;
+  roundKillCount = 0;
+  enemySpeed = 2;
 }
+
+// calls all necessary functions for gameplay and display
 
 function gameState(){
   state = "game";
@@ -238,6 +267,8 @@ function gameState(){
 
 }
 
+// function that is always running in draw
+
 function alwaysRunning(){
   if (killCount !== -1&&killCount>highscore){
     highscore = killCount;
@@ -252,8 +283,10 @@ function alwaysRunning(){
   }
 }
 
+// draw loop
+
 function draw() {
-  if (state === "title"&& !mouseIsPressed){
+  if (state === "title"&& !keyIsDown(13)){
     titleState();
     reset();
   }

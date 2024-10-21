@@ -52,7 +52,7 @@ function randMovement(){
 
 function dispBubbles(){
   for (let bubble of bubbles){
-    fill(bubble.r,bubble.g,bubble.b,bubble.a)
+    fill(bubble.r,bubble.g,bubble.b,bubble.a);
     circle(bubble.x,bubble.y,bubble.d);
   }
 }
