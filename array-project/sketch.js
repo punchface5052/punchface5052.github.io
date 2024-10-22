@@ -66,7 +66,7 @@ function titleState(){
 function reset(){
   char.position.x = width/2;
   char.position.y = height/2;
-  enemyArray = [];d
+  enemyArray = [];
   killCount = -1;
   roundKillCount = 0;
 }
