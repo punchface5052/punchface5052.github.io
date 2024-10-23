@@ -2,16 +2,10 @@
 // me
 // Oct 22, 2024
 
-// 
-// let grid = [[0,1,0,1,0,1],
-//             [0,1,0,1,0,1],
-//             [0,0,0,0,0,0],
-//             [1,0,1,0,1,0,0],
-//             [1,0,1,0,1,0,1]];
-
 let grid;
-
 let size;
+let badNeighbour = false;
+let conway = false;
 
 function setup() {
   if (windowWidth < windowHeight){
@@ -59,11 +53,43 @@ function keyPressed(){
             [1,0,1,0,1,0,0,0],
             [1,0,1,0,1,0,1,1]];
   }
+  if (key === "n") {
+    badNeighbour = !badNeighbour;
+  }
+  if (key === "c") {
+    conway = !conway;
+  }
+}
+
+function windowResized(){
+  if (windowWidth < windowHeight){
+    resizeCanvas(windowWidth,windowWidth);
+  }
+  else {
+    resizeCanvas(windowHeight,windowHeight);
+  }
+  size = width/20;
 }
 
 function mousePressed(){
-  if 
+  let x = Math.floor(mouseX/size);
+  let y = Math.floor(mouseY/size);
+  toggleCell(x,y);
+  if (badNeighbour === true){
+    toggleCell(x+1,y);
+    toggleCell(x-1,y);
+    toggleCell(x,y+1);
+    toggleCell(x,y-1);
+  }
 }
+
+function toggleCell(x,y){
+  if (x>=0 && y>=0 && x < size && y<size){
+    grid[y][x] = !grid[y][x];
+  }
+}
+
+
 
 function generateRandomGrid(cols, rows){
   let newGrid = [];
