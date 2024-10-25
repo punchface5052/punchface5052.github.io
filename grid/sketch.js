@@ -3,9 +3,12 @@
 // Oct 22, 2024
 
 let grid;
+const GRID_SIZE = 5;
 let size;
 let badNeighbour = false;
-let conway = false;
+let auto = false;
+let renderMult = 5;
+
 
 function setup() {
   if (windowWidth < windowHeight){
@@ -14,13 +17,16 @@ function setup() {
   else {
     createCanvas(windowHeight,windowHeight);
   }
-  size = width/20;
-  grid = generateRandomGrid(size,size);
+  size = width/GRID_SIZE;
+  grid = generateRandomGrid(GRID_SIZE,GRID_SIZE);
 }
 
 function draw() {
   background(220);
   dispGrid();
+  if (auto && frameCount%renderMult === 0){
+    grid = updateGrid();
+  }
 }
 
 function dispGrid(){
@@ -39,10 +45,10 @@ function dispGrid(){
 
 function keyPressed(){
   if (key === "r"){
-    grid = generateRandomGrid(size,size);
+    grid = generateRandomGrid(GRID_SIZE,GRID_SIZE);
   }
   if (key === "e") {
-    grid = genEmpty(size,size);
+    grid = genEmpty(GRID_SIZE,GRID_SIZE);
   }
   if (key === "l") {
     grid = [[0,1,0,0,1,0,0,0],
@@ -57,8 +63,47 @@ function keyPressed(){
     badNeighbour = !badNeighbour;
   }
   if (key === "c") {
-    conway = !conway;
+    grid = updateGrid();
   }
+  if (key === " ") {
+    auto = !auto;
+  }
+}
+
+function updateGrid(){
+  let grid2 = genEmpty(GRID_SIZE,GRID_SIZE);
+  for (let y = 0; y<GRID_SIZE; y++){
+    for (let x = 0; x<GRID_SIZE; x++){
+      let neighbours = 0;
+      for (let i = -1; i<=1; i++){
+        for (let j = -1; j<=1; j++){
+          if (y+i>=0 && y+i<GRID_SIZE && x+j >=0 && x+j<GRID_SIZE){
+            neighbours += grid[y+i][x+j];
+          }
+        }
+      }
+      neighbours -= grid[y][x];
+
+      if (grid[y][x] === 0){
+        if (neighbours === 3){
+          grid2[y][x] = 1;
+        }
+        else{
+          grid2[y][x] = 0;
+        }
+      }
+
+      if (grid[y][x] === 1){
+        if (neighbours === 2 || neighbours === 3){
+          grid2[y][x] = 1;
+        }
+        else{
+          grid2[y][x] = 0;
+        }
+      }
+    }
+  }
+  return grid2;
 }
 
 function windowResized(){
@@ -68,7 +113,7 @@ function windowResized(){
   else {
     resizeCanvas(windowHeight,windowHeight);
   }
-  size = width/20;
+  size = width/GRID_SIZE;
 }
 
 function mousePressed(){
@@ -84,7 +129,7 @@ function mousePressed(){
 }
 
 function toggleCell(x,y){
-  if (x>=0 && y>=0 && x < size && y<size){
+  if (x>=0 && y>=0 && x < GRID_SIZE && y<GRID_SIZE){
     grid[y][x] = !grid[y][x];
   }
 }
