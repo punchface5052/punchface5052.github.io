@@ -12,8 +12,10 @@
  - [Sound Effects Demo](sfx)
  - [Translation and Rotation](rotate)
  - [Grid Demo](grid)
+ - [Rectangle Grid](rect-grid)
 
 ## Projects
 - [Interactive Scene](interactive-scene)
 - [Failed Attempt at the Interactive Scene](failed-interactive-scene)
 - [Arrays and Object Notation](array-project)
+- [2D Grid Demonstration](grid-project)
