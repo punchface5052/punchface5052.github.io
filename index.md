@@ -13,6 +13,7 @@
  - [Translation and Rotation](rotate)
  - [Grid Demo](grid)
  - [Rectangle Grid](rect-grid)
+ - [Character Grid Stuffs](char-in-grid)
 
 ## Projects
 - [Interactive Scene](interactive-scene)
