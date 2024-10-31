@@ -5,20 +5,24 @@
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 
+let state = "title";
 let grid;
 const GRID_SIZE = 8;
 const BLACK = 1;
 const WHITE = 0;
 let cellSize;
+let side = "white";
+let babybel;
 
 function preload(){
-  loadImage("cheeses/cheeseking.jpg");
-  loadImage("cheeses/cheesemoon.jpg");
-  loadImage("cheeses/cheesepawn.jpg");
-  loadImage("cheeses/defcheesenotspugnebob.jpg");
-  loadImage("cheeses/cheesepizza.webp");
+  babybel = loadImage("cheeses/babybel.png");
+  loadImage("cheeses/cheeseking.png");
+  loadImage("cheeses/cheesemoon.png");
+  loadImage("cheeses/cheesepawn.png");
+  loadImage("cheeses/defnotspugneboobcheese.png");
+  loadImage("cheeses/pizzacheese.png");
   loadImage("cheeses/skyrimcheesewheel.png");
-  loadImage("cheeses/swisscheese.jpg");
+  loadImage("cheeses/swisscheese.png");
 }
 
 function setup() {
@@ -66,6 +70,7 @@ function genGrid(){
   return newGrid;
 }
 
+
 function dispGrid() {
   for (let y = 0; y < GRID_SIZE; y++) {
     for (let x = 0; x < GRID_SIZE; x++) {
@@ -76,6 +81,32 @@ function dispGrid() {
         fill("black");
       }
       square(x*cellSize, y*cellSize, cellSize);
+    }
+  }
+}
+
+function mousePressed(){
+  if (state === "title"){
+    state = "game";
+  }
+
+  else if (state === "game"){
+    let x = Math.floor(mouseX/cellSize);
+    let y = Math.floor(mouseY/cellSize);
+
+    movePiece(x,y);
+
+
+
+  }
+}
+
+function movePiece(theX,theY){
+  for (let y = 0; y < GRID_SIZE; y++) {
+    for (let x = 0; x < GRID_SIZE; x++) {
+      if (theX >= 0 && theY >= 0 && theX < GRID_SIZE && theY < GRID_SIZE){     image(babybel, x)
+        image(babybel, theX*cellSize, theY*cellSize, cellSize/2, cellSize/2);
+      }
     }
   }
 }
