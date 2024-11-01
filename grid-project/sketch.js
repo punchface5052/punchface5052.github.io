@@ -13,6 +13,7 @@ const WHITE = 0;
 let cellSize;
 let side = "white";
 let babybel;
+let pieceClicked = false;
 
 function preload(){
   babybel = loadImage("cheeses/babybel.png");
@@ -34,6 +35,7 @@ function setup() {
   }
   cellSize = height/GRID_SIZE;
   grid = genGrid();
+  imageMode(CENTER);
 }
 
 function windowResized() {
@@ -77,10 +79,14 @@ function dispGrid() {
       if (grid[y][x] === WHITE) {
         fill("white");
       }
+
       else if (grid[y][x] === BLACK){
         fill("black");
       }
       square(x*cellSize, y*cellSize, cellSize);
+      // if (piece.){
+      //   image(babybel, x*cellSize+cellSize/2, y*cellSize+cellSize/2, piece.size, piece.size);
+      // }
     }
   }
 }
@@ -102,11 +108,10 @@ function mousePressed(){
 }
 
 function movePiece(theX,theY){
-  for (let y = 0; y < GRID_SIZE; y++) {
-    for (let x = 0; x < GRID_SIZE; x++) {
-      if (theX >= 0 && theY >= 0 && theX < GRID_SIZE && theY < GRID_SIZE){     image(babybel, x)
-        image(babybel, theX*cellSize, theY*cellSize, cellSize/2, cellSize/2);
-      }
-    }
+  pieceClicked = !pieceClicked;
+  let piece = {
+    x: theX,
+    y: theY,
+    size: cellSize/2,
   }
 }
