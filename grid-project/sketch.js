@@ -14,6 +14,12 @@ let cellSize;
 let side = "white";
 let babybel;
 let pieceClicked = false;
+let piece = {
+  x: 0,
+  y: 0,
+  size: cellSize/2,
+  pieceType: "pawn",
+};
 
 function preload(){
   babybel = loadImage("cheeses/babybel.png");
@@ -24,6 +30,7 @@ function preload(){
   loadImage("cheeses/pizzacheese.png");
   loadImage("cheeses/skyrimcheesewheel.png");
   loadImage("cheeses/swisscheese.png");
+  
 }
 
 function setup() {
@@ -84,9 +91,10 @@ function dispGrid() {
         fill("black");
       }
       square(x*cellSize, y*cellSize, cellSize);
-      // if (piece.){
-      //   image(babybel, x*cellSize+cellSize/2, y*cellSize+cellSize/2, piece.size, piece.size);
-      // }
+      if (mousePressed){
+        piece.size = cellSize/2;
+        image(babybel, x*cellSize+cellSize/2, y*cellSize+cellSize/2, piece.size, piece.size);
+      }
     }
   }
 }
@@ -109,9 +117,6 @@ function mousePressed(){
 
 function movePiece(theX,theY){
   pieceClicked = !pieceClicked;
-  let piece = {
-    x: theX,
-    y: theY,
-    size: cellSize/2,
-  }
+  piece.x = theX;
+  piece.y = theY;
 }
