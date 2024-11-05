@@ -91,10 +91,6 @@ function dispGrid() {
         fill("black");
       }
       square(x*cellSize, y*cellSize, cellSize);
-      if (mousePressed){
-        piece.size = cellSize/2;
-        image(babybel, x*cellSize+cellSize/2, y*cellSize+cellSize/2, piece.size, piece.size);
-      }
     }
   }
 }
@@ -107,11 +103,13 @@ function mousePressed(){
   else if (state === "game"){
     let x = Math.floor(mouseX/cellSize);
     let y = Math.floor(mouseY/cellSize);
+    toggleCell(x,y);
+  }
+}
 
-    movePiece(x,y);
-
-
-
+function toggleCell(x,y){
+  if (x>=0 && y>=0 && x < GRID_SIZE && y<GRID_SIZE){
+    piece.pieceType = "babybel";
   }
 }
 
