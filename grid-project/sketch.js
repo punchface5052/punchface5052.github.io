@@ -101,20 +101,15 @@ function mousePressed(){
   }
 
   else if (state === "game"){
-    let x = Math.floor(mouseX/cellSize);
-    let y = Math.floor(mouseY/cellSize);
-    toggleCell(x,y);
-  }
-}
-
-function toggleCell(x,y){
-  if (x>=0 && y>=0 && x < GRID_SIZE && y<GRID_SIZE){
-    piece.pieceType = "babybel";
+    movePiece(mouseX,mouseY);
   }
 }
 
 function movePiece(theX,theY){
+  x = Math.floor(theX/cellSize);
+  y = Math.floor(theY/cellSize);
   pieceClicked = !pieceClicked;
-  piece.x = theX;
-  piece.y = theY;
+  if (theX){
+
+  }
 }
