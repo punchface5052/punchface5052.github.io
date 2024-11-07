@@ -14,12 +14,8 @@ let cellSize;
 let side = "white";
 let babybel;
 let pieceClicked = false;
-let piece = {
-  x: 0,
-  y: 0,
-  size: cellSize/2,
-  pieceType: "pawn",
-};
+
+
 
 function preload(){
   babybel = loadImage("cheeses/babybel.png");
