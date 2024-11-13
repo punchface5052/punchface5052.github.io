@@ -14,6 +14,7 @@
  - [Grid Demo](grid)
  - [Rectangle Grid](rect-grid)
  - [Character Grid Stuffs](char-in-grid)
+ - [Walker OOP](walker-oop)
 
 ## Projects
 - [Interactive Scene](interactive-scene)

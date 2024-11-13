@@ -6,42 +6,42 @@
 // - describe what you did to take this project "above and beyond"
 
 let state = "title";
-let grid, cellSize;
+let backgrid, grid, cellSize;
 const GRID_SIZE = 8;
 const BLACK = 1;
 const WHITE = 0;
 let side = "white";
 let babybel, wKing, wQueen, wRook, wKnight, wBishop, wPawn, bKing, bQueen, bRook, bKnight, bBishop, bPawn, spugnebob;
 let pieceClicked = false;
-
+let pieces = ['br','bn','bb','bq','bk','bp','wp','wq','wk','wb','wn','wr'];
 let startGrid = [
-  ['r','n','b','q','k','b','n','r'],
-  ['p','p','p','p','p','p','p','p'],
+  ['br','bn','bb','bq','bk','bb','bn','br'],
+  ['bp','bp','bp','bp','bp','bp','bp','bp'],
   [ 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ],
   [ 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ],
   [ 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ],
   [ 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ],
-  ['p','p','p','p','p','p','p','p'],
-  ['r','n','b','q','k','b','n','r']
+  ['wp','wp','wp','wp','wp','wp','wp','wp'],
+  ['wr','wn','wb','wq','wk','wb','wn','wr']
 ];
 
 function preload(){
-  babybel = loadImage("cheeses/babybel.png");
-  spugnebob = loadImage("cheeses/defnotspugneboobcheese.png");
+  babybel = loadImage("sprites/babybel.png");
+  spugnebob = loadImage("sprites/defnotspugnebobcheese.png");
 
-  wKing = loadImage("cheeses/wcheeseking.png");
-  wRook = loadImage("cheeses/wcheesemoon.png");
-  wPawn = loadImage("cheeses/wcheesepawn.png");
-  wQueen = loadImage("cheeses/wpizzacheese.png");
-  wKnight = loadImage("cheeses/wskyrimcheesewheel.png");
-  wBishop = loadImage("cheeses/wswisscheese.png");
+  wk = loadImage("sprites/wcheeseking.png");
+  wr = loadImage("sprites/wcheesemoon.png");
+  wp = loadImage("sprites/wcheesepawn.png");
+  wq = loadImage("sprites/wpizzacheese.png");
+  wn = loadImage("sprites/wskyrimcheesewheel.png");
+  wb = loadImage("sprites/wswisscheese.png");
 
-  bQueen = loadImage("cheeses/bpizzacheese.png");
-  bKnight = loadImage("cheeses/bskyrimcheesewheel.png");
-  bBishop = loadImage("cheeses/bswisscheese.png");
-  bKing = loadImage("cheeses/bcheeseking.png");
-  bRook = loadImage("cheeses/bcheesemoon.png");
-  bPawn = loadImage("cheeses/bcheesepawn.png");
+  bq = loadImage("sprites/bpizzacheese.png");
+  bn = loadImage("sprites/bskyrimcheesewheel.png");
+  bb = loadImage("sprites/bswisscheese.png");
+  bk = loadImage("sprites/bcheeseking.png");
+  br = loadImage("sprites/bcheesemoon.png");
+  bp = loadImage("sprites/bcheesepawn.png");
   
 }
 
@@ -53,7 +53,8 @@ function setup() {
     createCanvas(windowHeight, windowHeight);
   }
   cellSize = height/GRID_SIZE;
-  grid = genGrid();
+  backgrid = genGrid();
+  grid = startGrid;
   imageMode(CENTER);
 }
 
@@ -95,17 +96,59 @@ function genGrid(){
 function dispGrid() {
   for (let y = 0; y < GRID_SIZE; y++) {
     for (let x = 0; x < GRID_SIZE; x++) {
-      if (grid[y][x] === WHITE) {
-        fill("white");
+      if (backgrid[y][x] === WHITE) {
+        fill(230);
       }
 
-      else if (grid[y][x] === BLACK){
+      else if (backgrid[y][x] === BLACK){
         fill("black");
       }
       square(x*cellSize, y*cellSize, cellSize);
+      for (let piece of pieces){
+        if (grid[y][x] === piece){
+          image(piece,x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize,cellSize);
+        }
+      }
+      if (grid[y][x]==='wp'){
+        image(wPawn,x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize,cellSize);
+      }
+      if (grid[y][x]==='bp'){
+        image(bPawn,x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize,cellSize);
+      }
+      if (grid[y][x]==='wr'){
+        image(wRook,x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize,cellSize);
+      }
+      if (grid[y][x]==='br'){
+        image(bRook,x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize,cellSize);
+      }
+      if (grid[y][x]==='wn'){
+        image(wKnight,x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize,cellSize);
+      }
+      if (grid[y][x]==='bn'){
+        image(bKnight,x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize,cellSize);
+      }
+      if (grid[y][x]==='wb'){
+        image(wBishop,x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize,cellSize);
+      }
+      if (grid[y][x]==='bb'){
+        image(bBishop,x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize,cellSize);
+      }
+      if (grid[y][x]==='wq'){
+        image(wQueen,x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize,cellSize);
+      }
+      if (grid[y][x]==='bq'){
+        image(bQueen,x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize,cellSize);
+      }
+      if (grid[y][x]==='wk'){
+        image(wKing,x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize,cellSize);
+      }
+      if (grid[y][x]==='bk'){
+        image(bKing,x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize,cellSize);
+      }
     }
   }
 }
+
 
 function mousePressed(){
   if (state === "title"){
@@ -120,8 +163,8 @@ function mousePressed(){
 function movePiece(theX,theY){
   x = Math.floor(theX/cellSize);
   y = Math.floor(theY/cellSize);
-  pieceClicked = !pieceClicked;
-  if (theX){
-
-  }
+  console.log(grid[y][x]);
 }
+
+
+"Hello World" = Hello World
