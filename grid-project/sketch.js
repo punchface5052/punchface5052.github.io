@@ -10,10 +10,10 @@ let backgrid, grid, cellSize;
 const GRID_SIZE = 8;
 const BLACK = 1;
 const WHITE = 0;
+let imageMap = new Map();
 let side = "white";
-let babybel, wKing, wQueen, wRook, wKnight, wBishop, wPawn, bKing, bQueen, bRook, bKnight, bBishop, bPawn, spugnebob;
-let pieceClicked = false;
-let pieces = ['br','bn','bb','bq','bk','bp','wp','wq','wk','wb','wn','wr'];
+let pieceClicked = false; 
+let pieces = ['br','bn','bb','bq','bk','bp','wp','wq','wk','wb','wn','wr']; // list all pieces to go through each one in a for loop
 let startGrid = [
   ['br','bn','bb','bq','bk','bb','bn','br'],
   ['bp','bp','bp','bp','bp','bp','bp','bp'],
@@ -26,13 +26,15 @@ let startGrid = [
 ];
 
 function preload(){
+
+  // Load all images
   babybel = loadImage("sprites/babybel.png");
   spugnebob = loadImage("sprites/defnotspugnebobcheese.png");
 
-  wk = loadImage("sprites/wcheeseking.png");
-  wr = loadImage("sprites/wcheesemoon.png");
-  wp = loadImage("sprites/wcheesepawn.png");
-  wq = loadImage("sprites/wpizzacheese.png");
+  wk = loadImage("sprites/wcheeseking.png"); // White King
+  wr = loadImage("sprites/wcheesemoon.png"); // White Rook
+  wp = loadImage("sprites/wcheesepawn.png"); // White Pawn
+  wq = loadImage("sprites/wpizzacheese.png"); 
   wn = loadImage("sprites/wskyrimcheesewheel.png");
   wb = loadImage("sprites/wswisscheese.png");
 
@@ -42,7 +44,20 @@ function preload(){
   bk = loadImage("sprites/bcheeseking.png");
   br = loadImage("sprites/bcheesemoon.png");
   bp = loadImage("sprites/bcheesepawn.png");
-  
+
+  // Set a map to get rid of the repetitive if statements for loading the images
+  imageMap.set("wp", wp);
+  imageMap.set("wr", wr);
+  imageMap.set("wn", wn);
+  imageMap.set("wb", wb);
+  imageMap.set("wq", wq);
+  imageMap.set("wk", wk);
+  imageMap.set("bp", bp);
+  imageMap.set("br", br);
+  imageMap.set("bn", bn);
+  imageMap.set("bb", bb);
+  imageMap.set("bq", bq);
+  imageMap.set("bk", bk);  
 }
 
 function setup() {
@@ -69,8 +84,13 @@ function windowResized() {
 }
 
 function draw() {
-  background(220);
-  dispGrid();
+  if (state === "title"){
+    dispTitle();
+  }
+  if (state === "game"){
+    background(10);
+    dispGrid();
+  }
 }
 
 function genGrid(){
@@ -97,7 +117,7 @@ function dispGrid() {
   for (let y = 0; y < GRID_SIZE; y++) {
     for (let x = 0; x < GRID_SIZE; x++) {
       if (backgrid[y][x] === WHITE) {
-        fill(230);
+        fill(240);
       }
 
       else if (backgrid[y][x] === BLACK){
@@ -106,49 +126,19 @@ function dispGrid() {
       square(x*cellSize, y*cellSize, cellSize);
       for (let piece of pieces){
         if (grid[y][x] === piece){
-          image(piece,x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize,cellSize);
+          image(imageMap.get(piece),x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize,cellSize);
         }
-      }
-      if (grid[y][x]==='wp'){
-        image(wPawn,x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize,cellSize);
-      }
-      if (grid[y][x]==='bp'){
-        image(bPawn,x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize,cellSize);
-      }
-      if (grid[y][x]==='wr'){
-        image(wRook,x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize,cellSize);
-      }
-      if (grid[y][x]==='br'){
-        image(bRook,x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize,cellSize);
-      }
-      if (grid[y][x]==='wn'){
-        image(wKnight,x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize,cellSize);
-      }
-      if (grid[y][x]==='bn'){
-        image(bKnight,x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize,cellSize);
-      }
-      if (grid[y][x]==='wb'){
-        image(wBishop,x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize,cellSize);
-      }
-      if (grid[y][x]==='bb'){
-        image(bBishop,x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize,cellSize);
-      }
-      if (grid[y][x]==='wq'){
-        image(wQueen,x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize,cellSize);
-      }
-      if (grid[y][x]==='bq'){
-        image(bQueen,x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize,cellSize);
-      }
-      if (grid[y][x]==='wk'){
-        image(wKing,x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize,cellSize);
-      }
-      if (grid[y][x]==='bk'){
-        image(bKing,x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize,cellSize);
       }
     }
   }
 }
 
+function dispTitle(){
+  background(10);
+  fill("white");
+  textAlign(CENTER);
+  text("Cheesse", width/2, height/2);
+}
 
 function mousePressed(){
   if (state === "title"){
@@ -166,5 +156,3 @@ function movePiece(theX,theY){
   console.log(grid[y][x]);
 }
 
-
-"Hello World" = Hello World
