@@ -3,8 +3,7 @@
 // Oct. 28 2024
 //
 // Extra for Experts:
-// I'm Going to be honest, I couldn't think of how to make this work without class systems or using a bunch of seperate javascript files like the other projects, and I was in way too deep to fully change it to class systems, with no time after learning them...  so I gave up. I know it looks like I didn't do anything, but that's because everytime I did something it didn't work, then everytime you asked me if I was doing good, I thought I knew how to do it, but didn't.
-// I know this seems like I'm looking for pity, but I don't deserve it, I genuinely just completely failed at this assignment.
+// I tried to make this work without knowing oop, and it just didn't work
 
 let state = "title";
 let backgrid, grid, cellSize;
@@ -12,8 +11,11 @@ let firstPawnMove = true;
 const GRID_SIZE = 8;
 const BLACK = 1;
 const WHITE = 0;
+let moveArray = [];
 let imageMap = new Map();
 let turn = "white";
+let selectedPiece = '';
+let selectTime = 0;
 let pieceClicked = false; 
 let pieces = ['br','bn','bb','bq','bk','bp','wp','wq','wk','wb','wn','wr']; // list all pieces to go through each one in a for loop
 let startGrid = [
@@ -119,26 +121,27 @@ function genGrid(){ // generates generic chess grid
 function dispGrid() { // draws the images and background grid
   for (let y = 0; y < GRID_SIZE; y++) {
     for (let x = 0; x < GRID_SIZE; x++) {
-      if (backgrid[y][x] === "highlight"){ // highlights selected piece
-        fill("yellow")
-      }
       // basic background chess board
-      else if (backgrid[y][x] === WHITE) {
+      if (backgrid[y][x] === WHITE) {
         fill(240);
       }
-
       else if (backgrid[y][x] === BLACK){
         fill("black");
       }
       square(x*cellSize, y*cellSize, cellSize);
-
-      if (grid[y][x] === 'move'){ // shows possible moves
-        image(babybel, x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize,cellSize);
-      }
   
+      if(pieceClicked && Math.floor(mouseX/cellSize) === x && Math.floor(mouseY/cellSize) === y){
+        fill('yellow');
+        square(x*cellSize,y*cellSize,cellSize);
+      }
       for (let piece of pieces){ // displays pieces
         if (grid[y][x] === piece){
           image(imageMap.get(piece),x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize,cellSize);
+        }
+      }
+      for (let i = 0; i < moveArray.length; i++){
+        for (let j = 0; j<moveArray[i].length; j++){
+          image(babybel, moveArray[i][j]*cellSize, moveArray[i][j]*cellSize, cellSize, cellSize);
         }
       }
     }
@@ -163,19 +166,16 @@ function mousePressed(){
 }
 
 function highlightPiece(theX,theY){
-  let prevGrid = backgrid[theY][theX]
-  if (pieceClicked ){
-    backgrid[theY][theX] = "highlight";
-  }
-  else{
-    backgrid[theY][theX] = prevGrid;
+  if (pieceClicked){
+    fill('yellow');
+    square(theX*cellSize,theY*cellSize,cellSize);
   }
 }
 
 function movePiece(theX,theY){ // goes through the processes to move pieces
   x = Math.floor(theX/cellSize);
   y = Math.floor(theY/cellSize);
-  if (grid[y][x] !== 0 && !pieceClicked){ 
+  if (x>=0 && x<GRID_SIZE && y>=0 && y<GRID_SIZE && grid[y][x] !== 0 && grid[y][x][0] === turn[0] && !pieceClicked){ 
     pieceClicked = true;
     highlightPiece(x,y);
     dispMoves(x,y);
@@ -185,13 +185,44 @@ function movePiece(theX,theY){ // goes through the processes to move pieces
   }
 }
 
-function dispMoves(aX, aY){ // displays possible moves
-  if (grid[aY][aX] === 'wp' && turn === "white"){ // pawn
-    if(grid[aY-1][aX] === 0){
-      grid[aY-1][aX] = 'move';
+function dispMoves(aX, aY){ // sets up for displaying possible moves
+  pieceClicked = true;
+  selectTime = millis()+100;
+  if (selectTime > millis()){
+    if (grid[aY][aX] === 'wp' && aY+1 > 0 && grid[aY+1][aX] === 0){
+      selectedPiece = 'wp';
+      moveArray.push(aY);
+      moveArray.push(aX);
+      console.log(moveArray);
     }
-    if(grid[aY-2][aX] === 0 && firstPawnMove){
-      grid[aY-2][aX] = 'move';
+    if (grid[aY][aX] === 'wr'){
+      selectedPiece = 'wr';
+      for (let i = -GRID_SIZE; i < GRID_SIZE; i++){
+        if (aY+i>=0 && aY+i<GRID_SIZE && i!== 0){
+          moveArray.push(aY+i);
+          moveArray.push(aX);
+        }
+      }
+      for (let j = -GRID_SIZE; j < GRID_SIZE; j++){
+        if(aX+j>=0 && aX+j<GRID_SIZE && j!== 0){
+          moveArray.push(aY);
+          moveArray.push(aX+j);
+        }
+      }
+    }
+    if (mouseIsPressed){
+      selectTime -= 1000;
     }
   }
+  else{
+    grid[aY][aX] = selectedPiece;
+    if (turn === 'white'){
+      turn = 'black';
+    }
+    else if (turn === 'black'){
+      turn = 'white';
+    }
+    moveArray = [];
+  }
 }
+
