@@ -29,7 +29,7 @@ class Particulate {
     this.alpha -= 1;
   }
   isDead(){
-    return this.opacity <= 0;
+    return this.alpha <= 0;
   }
 }
 
